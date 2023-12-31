@@ -43,8 +43,9 @@ func TestBatchSlice(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var got []int
-			for _, batch := range iter.SliceBatch(tt.slice, tt.batchSize) {
+			for i, batch := range iter.SliceBatch(tt.slice, tt.batchSize) {
 				got = append(got, batch...)
+				t.Log(i)
 			}
 			if !sliceEqual(got, tt.slice) {
 				t.Errorf("SliceBatch() = %v, want %v", got, tt.slice)
