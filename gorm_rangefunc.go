@@ -8,7 +8,11 @@
 
 package iter
 
-import "gorm.io/gorm"
+import (
+	"iter"
+
+	"gorm.io/gorm"
+)
 
 // GormBatch returns a function that corporate with range-over-func syntax
 // to iterate over a slice in batches.
@@ -19,7 +23,7 @@ import "gorm.io/gorm"
 //	for i, batch := range iter.GormBatch[user](db, 1<<10) {
 //		users = append(users, batch...)
 //	}
-func GormBatch[E any](tx *gorm.DB, batchSize int) func(func(int, []E) bool) {
+func GormBatch[E any](tx *gorm.DB, batchSize int) iter.Seq2[int, []E] {
 	it := NewBatchFromGorm[E](tx, batchSize)
 	return func(yield func(int, []E) bool) {
 		defer it.Stop()
